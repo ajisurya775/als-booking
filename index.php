@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<?php
+
+session_start();
+
+if (!isset($_SESSION['email']))
+  header('Location:' . $config['base_url'] . 'auth/login.php');
+?>
+
 <head>
   <?php include "configs/config_url.php" ?>
   <?php include "components/header.php" ?>

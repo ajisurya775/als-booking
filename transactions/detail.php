@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-    <?php include "configs/config_url.php" ?>
-    <?php include "components/header.php" ?>
+    <?php include "../configs/config_url.php" ?>
+    <?php include "../components/header.php" ?>
 </head>
 
 <body>
@@ -17,10 +17,10 @@
                         <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li>
                     </ul>
                 </form>
-                <?php include "components/navbar.php" ?>
+                <?php include "../components/navbar.php" ?>
             </nav>
 
-            <?php include "components/sidebar.php" ?>
+            <?php include "../components/sidebar.php" ?>
 
             <!-- Main Content -->
             <div class="main-content">
@@ -165,11 +165,11 @@
         </div>
         </section>
     </div>
-    <?php include "components/" ?>
+    <?php include "../components/footer.php" ?>
     </div>
     </div>
 
-    <?php include "components/script.php" ?>
+    <?php include "../components/script.php" ?>
 
 </body>
 
