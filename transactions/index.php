@@ -68,7 +68,7 @@
                                                         <td>
                                                             <div class="badge badge-success">Completed</div>
                                                         </td>
-                                                        <td><a href="<?= $config['base_url'] . 'detail.php' ?>" class="btn btn-secondary">Detail</a></td>
+                                                        <td><a href="<?= $config['base_url'] . 'transactions/detail.php' ?>" class="btn btn-secondary">Detail</a></td>
                                                     </tr>
                                                     <tr>
                                                         <td>

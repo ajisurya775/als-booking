@@ -2,8 +2,9 @@
 <html lang="en">
 
 <head>
-    <?php include "configs/config_url.php" ?>
-    <?php include "components/header.php" ?>
+    <?php session_start(); ?>
+    <?php include "../configs/config_url.php" ?>
+    <?php include "../components/header.php" ?>
 </head>
 
 <body>
@@ -19,21 +20,38 @@
                         <div class="card card-primary">
                             <div class="card-header">
                                 <h4>Login</h4>
+
                             </div>
 
+
+
                             <div class="card-body">
-                                <form method="POST" action="#" class="needs-validation" novalidate="">
+
+                                <?php if (isset($_SESSION['error']) && $_SESSION['error']) { ?>
+                                    <div class="alert alert-danger alert-dismissible show fade">
+                                        <div class="alert-body">
+                                            <button class="close" data-dismiss="alert">
+                                                <span>&times;</span>
+                                            </button>
+                                            <?= $_SESSION['error'] ?>
+                                            <?php unset($_SESSION['error']) ?>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
+
+                                <form method="POST" action="<?= $config['base_url'] . 'controllers/AuthController.php?action=register' ?>" class="needs-validation" novalidate="">
                                     <div class="form-group">
                                         <label for="name">Name</label>
-                                        <input id="name" type="name" class="form-control" name="name" tabindex="1" required autofocus>
+                                        <input id="name" type="name" class="form-control" value="<?= $_SESSION['register_form']['name'] ?? '' ?>" name="name" tabindex="1" required autofocus>
                                         <div class="invalid-feedback">
-                                            Please fill in your email
+                                            Please fill in your name
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="email">Email</label>
-                                        <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>
+                                        <input id="email" type="email" class="form-control" value="<?= $_SESSION['register_form']['email'] ?? '' ?>" name="email" tabindex="1" required autofocus>
                                         <div class="invalid-feedback">
                                             Please fill in your email
                                         </div>
@@ -51,11 +69,11 @@
 
                                     <div class="form-group">
                                         <div class="d-block">
-                                            <label for="password" class="control-label">Confirmation Password</label>
+                                            <label for="password" class="control-label">Password Confirmation</label>
                                         </div>
-                                        <input id="password" type="password" class="form-control" name="password" tabindex="2" required>
+                                        <input id="password" type="password" class="form-control" name="password_confirm" tabindex="2" required>
                                         <div class="invalid-feedback">
-                                            please fill in your password
+                                            please fill in your password Confirmation
                                         </div>
                                     </div>
 
@@ -64,7 +82,7 @@
                                             Register
                                         </button>
                                     </div>
-                                    Already have account? <a href="<?= $config['base_url'] . 'login.php' ?>">Login</a>
+                                    Already have account? <a href="<?= $config['base_url'] . 'auth/login.php' ?>">Login</a>
 
                                 </form>
 
@@ -80,7 +98,8 @@
     </div>
     </div>
 
-    <?php include "components/script.php" ?>
+    <?php include "../components/script.php" ?>
+
 
 </body>
 
