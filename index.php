@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<?php
-
-session_start();
-
-if (!isset($_SESSION['email']))
-  header('Location:' . $config['base_url'] . 'auth/login.php');
-?>
-
 <head>
   <?php include "configs/config_url.php" ?>
   <?php include "components/header.php" ?>
@@ -22,7 +14,7 @@ if (!isset($_SESSION['email']))
         <form class="form-inline mr-auto">
           <ul class="navbar-nav mr-3">
             <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
-            <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li>
+            <!-- <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li> -->
           </ul>
         </form>
         <?php include "components/navbar.php" ?>
@@ -57,6 +49,11 @@ if (!isset($_SESSION['email']))
                       <select class="form-control">
                         <option>Kenopan</option>
                       </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Tanggal Berangkat</label>
+                      <input type="date" class="form-control">
                     </div>
 
                     <div class="form-group">
