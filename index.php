@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <?php require_once "configs/connection.php"; ?>
   <?php include "configs/config_url.php" ?>
   <?php include "components/header.php" ?>
 </head>
@@ -37,88 +38,63 @@
               <div class="col-12 col-md-6 col-lg-6">
                 <div class="card">
                   <div class="card-body">
-                    <div class="form-group">
-                      <label>Dari</label>
-                      <select class="form-control">
-                        <option>Medan</option>
-                      </select>
-                    </div>
+                    <form method="POST" action="<?= $config['base_url'] . 'controllers/DepartureController.php?action=search' ?>" class="needs-validation" novalidate="">
 
-                    <div class="form-group">
-                      <label>Tujuan</label>
-                      <select class="form-control">
-                        <option>Kenopan</option>
-                      </select>
-                    </div>
+                      <div class="form-group">
+                        <label>Dari</label>
+                        <select class="form-control" name="from_province_id">
+                          <option value="1">Medan</option>
+                        </select>
+                      </div>
 
-                    <div class="form-group">
-                      <label>Tanggal Berangkat</label>
-                      <input type="date" class="form-control">
-                    </div>
+                      <div class="form-group">
+                        <label>Tujuan</label>
+                        <?php
+                        $stmt = $pdo->prepare("select * from provinces where not id=:id");
+                        $stmt->execute(['id' => 1]);
 
-                    <div class="form-group">
-                      <label>Orang Dewasa</label>
-                      <input type="number" class="form-control">
-                    </div>
+                        $provinces = $stmt->fetchAll();
 
-                    <div class="form-group">
-                      <label>Anak-anak</label>
-                      <input type="number" class="form-control">
-                    </div>
+                        ?>
+                        <select class="form-control" name="to_province_id">
 
-                    <button class="btn btn-primary"><i class="fa fa-search"></i> Cari</button>
+                          <?php foreach ($provinces as $key => $value) {
+                          ?>
+                            <option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
+                          <?php } ?>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label>Tanggal Berangkat</label>
+                        <?php
+                        $stmt = $pdo->prepare("SELECT * FROM cart_departures WHERE user_id = :user_id");
+                        $stmt->execute([':user_id' => $_SESSION['id']]);
+                        $cart = $stmt->fetch();
+
+                        ?>
+                        <input type="date" class="form-control" value="<?= $cart['date_departure'] ?? '' ?>" name="date_departure" required autofocus>
+
+                        <div class="invalid-feedback">
+                          Silahkan isi tanggal keberangkatan anda
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label>Jumlah Penumpang</label>
+                        <input type="number" class="form-control" value="<?= $cart['quantity'] ?? '' ?>" name="quantity" min="1" required autofocus>
+                        <div class="invalid-feedback">
+                          Silahkan isi jumlah penumpang
+                        </div>
+                      </div>
+
+                      <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Cari</button>
+                    </form>
+
                   </div>
                 </div>
               </div>
-              <div class="col-12 col-md-6 col-lg-6">
-                <div class="card">
-                  <div class="card-header">
-                    <h4>Hasil Pencarian</h4>
-                  </div>
-                  <div class="card-body">
-                    <div class="section-title mt-0">Default</div>
-                    <article class="article">
-                      <div class="article-header">
-                        <div class="article-image" data-background="assets/img/news/img08.jpg">
-                        </div>
-                        <div class="article-title">
-                          <h2><a href="#">Medan Kenopan</a></h2>
-                        </div>
-                      </div>
-                      <div class="article-details">
-                        <p>Rp 500.000</p>
-                        <p>Sisa 1 kursi</p>
-                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse
-                          cillum dolore eu fugiat nulla pariatur.
-                        </p>
-                        <div class="article-cta">
-                          <a href="#" class="btn btn-primary">Pesan</a>
-                        </div>
-                      </div>
-                    </article>
-                    <article class="article">
-                      <div class="article-header">
-                        <div class="article-image" data-background="assets/img/news/img08.jpg">
-                        </div>
-                        <div class="article-title">
-                          <h2><a href="#">Medan Kenopan</a></h2>
-                        </div>
-                      </div>
-                      <div class="article-details">
-                        <p>Rp 500.000</p>
-                        <p>Sisa 1 kursi</p>
-                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse
-                          cillum dolore eu fugiat nulla pariatur.
-                        </p>
-                        <div class="article-cta">
-                          <a href="#" class="btn btn-primary">Pesan</a>
-                        </div>
-                      </div>
-                    </article>
-                  </div>
-                </div>
 
-              </div>
             </div>
           </div>
         </section>
