@@ -14,7 +14,7 @@ function register($pdo, $config, $name, $email, $password)
 
         $user_id = $pdo->lastInsertId();
 
-        $_SESSION['user_id'] = $user_id;
+        $_SESSION['id'] = $user_id;
         $_SESSION['name'] = $name;
         $_SESSION['email'] = $email;
 
@@ -30,5 +30,5 @@ function isEmailAlreadyRegister($pdo, $email)
     $stmt = $pdo->prepare("select * from users where email=:email");
     $stmt->execute(['email' => $email]);
 
-    return $stmt = $stmt->fetch();
+    return $stmt->fetch();
 }

@@ -30,7 +30,6 @@
 
 session_start();
 
-
 if (!isset($_SESSION['email']) && $_SERVER['DOCUMENT_URI'] != '/auth/login.php' && $_SERVER['DOCUMENT_URI'] != '/auth/register.php')
     header('Location:' . $config['base_url'] . 'auth/login.php');
 
