@@ -41,39 +41,42 @@
                             $toProvinceId = $_GET['to_province_id'];
 
                             $stmt = $pdo->prepare("
-                            select buses.name, buses.capacity, bus_departures.price, departure_hours.hour
+                            select bus_departures.id,bus_departures.station_id, buses.name, buses.capacity, bus_departures.price, departure_hours.hour, buses.asset_url
                             from bus_departures
                             join departure_hours on bus_departures.departure_hour_id = departure_hours.id
                             join buses on bus_departures.bus_id = buses.id
                             where from_province_id=:from_province_id 
                             and to_province_id=:to_province_id
                              ");
+
                             $stmt->execute([
                                 ':from_province_id' => $fromProvinceId,
                                 ':to_province_id' => $toProvinceId
                             ]);
 
                             $departures = $stmt->fetchAll();
-
                             ?>
 
                             <?php foreach ($departures as $key => $value) { ?>
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                                     <article class="article">
                                         <div class="article-header">
-                                            <div class="article-image" data-background="assets/img/news/img08.jpg">
+                                            <div class="article-image" data-background="<?= $value['asset_url'] ?>">
                                             </div>
                                             <div class="article-title">
                                                 <h2><a href="#"><?= $value['name'] ?></a></h2>
                                             </div>
                                         </div>
                                         <div class="article-details">
-                                            <p> Rp. <?= (int)$value['price'] ?></p>
-                                            <p>Sisa Kursi <?= $value['capacity'] ?></p>
-                                            <p>Jadwal <?= $value['hour'] ?></p>
-                                            <div class="article-cta">
-                                                <a href="#" class="btn btn-primary">Pesan Sekarang</a>
-                                            </div>
+                                            <form action="<?= $config['base_url'] . 'controllers/OrderController.php?action=create-order&departure_id=' . $value['id'] . '&station_id=' . $value['station_id'] ?>" method="post">
+                                                <p>Harga Rp. <?= (int)$value['price'] ?></p>
+                                                <p>Sisa Kursi <?= $value['capacity'] ?></p>
+                                                <p>Jadwal <?= $value['hour'] ?></p>
+                                                <div class="article-cta">
+                                                    <button type="submit" class="btn btn-primary">Pesan Sekarang</button>
+                                                </div>
+                                            </form>
+
                                         </div>
                                     </article>
                                 </div>
