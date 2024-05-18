@@ -9,7 +9,7 @@ require_once "../Traits/generateOrderNumber.php";
 require_once "../service/OrderService.php";
 require_once "../service/DepartureService.php";
 
-if ($_GET['action'] == 'create-order') {
+if (isset($_GET['action']) == 'create-order') {
 
     $departureId = $_GET['departure_id'];
     $stationId = $_GET['station_id'];
@@ -25,4 +25,43 @@ if ($_GET['action'] == 'create-order') {
     $createOrder = insertOrder($pdo, $orderNumber, $stationId, $userId, $name, $cart, $busDeparture);
 
     header("Location:" . $config['base_url'] . 'transactions');
+}
+
+function getAllOrderByUserId($pdo, $query)
+{
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['user_id' => $_SESSION['id']]);
+
+    return $stmt->fetchAll();
+}
+
+function getOrderById($pdo, $query, $id)
+{
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['id' => $id]);
+
+    return $stmt->fetch();
+}
+
+function getOrderChairNumberByOrderId($pdo, $query, $id)
+{
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['order_id' => $id]);
+
+    return $stmt->fetchAll();
+}
+
+function statusOrder($status)
+{
+    $class = '';
+    if ($status == 'Pending')
+        $class = 'badge badge-warning';
+    else if ($status == 'Paid')
+        $class = 'badge badge-primary';
+    else if ($status == 'Finish')
+        $class = 'badge badge-success';
+    else
+        $class = 'badge badge-danger';
+
+    return $class;
 }
