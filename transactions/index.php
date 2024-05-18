@@ -45,94 +45,52 @@
                                                             #
                                                         </th>
                                                         <th>Order Number</th>
-                                                        <th>Jumlah Org Dewasa</th>
-                                                        <th>Anak-anak</th>
+                                                        <th>Jumlah Tiket</th>
+                                                        <th>Rute</th>
                                                         <th>Keberangkatan</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            1
-                                                        </td>
-                                                        <td>order-2405-00001</td>
-                                                        <td class="align-middle">
-                                                            5
-                                                        </td>
-                                                        <td>
-                                                            <img alt="image" src="assets/img/avatar/avatar-5.png" class="rounded-circle" width="35" data-toggle="tooltip" title="Wildan Ahdian">
-                                                        </td>
-                                                        <td>2018-01-20</td>
-                                                        <td>
-                                                            <div class="badge badge-success">Completed</div>
-                                                        </td>
-                                                        <td><a href="<?= $config['base_url'] . 'transactions/detail.php' ?>" class="btn btn-secondary">Detail</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            2
-                                                        </td>
-                                                        <td>Redesign homepage</td>
-                                                        <td class="align-middle">
-                                                            <div class="progress" data-height="4" data-toggle="tooltip" title="0%">
-                                                                <div class="progress-bar" data-width="0"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <img alt="image" src="assets/img/avatar/avatar-1.png" class="rounded-circle" width="35" data-toggle="tooltip" title="Nur Alpiana">
-                                                            <img alt="image" src="assets/img/avatar/avatar-3.png" class="rounded-circle" width="35" data-toggle="tooltip" title="Hariono Yusup">
-                                                            <img alt="image" src="assets/img/avatar/avatar-4.png" class="rounded-circle" width="35" data-toggle="tooltip" title="Bagus Dwi Cahya">
-                                                        </td>
-                                                        <td>2018-04-10</td>
-                                                        <td>
-                                                            <div class="badge badge-info">Todo</div>
-                                                        </td>
-                                                        <td><a href="#" class="btn btn-secondary">Detail</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            3
-                                                        </td>
-                                                        <td>Backup database</td>
-                                                        <td class="align-middle">
-                                                            <div class="progress" data-height="4" data-toggle="tooltip" title="70%">
-                                                                <div class="progress-bar bg-warning" data-width="70%"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <img alt="image" src="assets/img/avatar/avatar-1.png" class="rounded-circle" width="35" data-toggle="tooltip" title="Rizal Fakhri">
-                                                            <img alt="image" src="assets/img/avatar/avatar-2.png" class="rounded-circle" width="35" data-toggle="tooltip" title="Hasan Basri">
-                                                        </td>
-                                                        <td>2018-01-29</td>
-                                                        <td>
-                                                            <div class="badge badge-warning">In Progress</div>
-                                                        </td>
-                                                        <td><a href="#" class="btn btn-secondary">Detail</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            4
-                                                        </td>
-                                                        <td>Input data</td>
-                                                        <td class="align-middle">
-                                                            <div class="progress" data-height="4" data-toggle="tooltip" title="100%">
-                                                                <div class="progress-bar bg-success" data-width="100%"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <img alt="image" src="assets/img/avatar/avatar-2.png" class="rounded-circle" width="35" data-toggle="tooltip" title="Rizal Fakhri">
-                                                            <img alt="image" src="assets/img/avatar/avatar-5.png" class="rounded-circle" width="35" data-toggle="tooltip" title="Isnap Kiswandi">
-                                                            <img alt="image" src="assets/img/avatar/avatar-4.png" class="rounded-circle" width="35" data-toggle="tooltip" title="Yudi Nawawi">
-                                                            <img alt="image" src="assets/img/avatar/avatar-1.png" class="rounded-circle" width="35" data-toggle="tooltip" title="Khaerul Anwar">
-                                                        </td>
-                                                        <td>2018-01-16</td>
-                                                        <td>
-                                                            <div class="badge badge-success">Completed</div>
-                                                        </td>
-                                                        <td><a href="#" class="btn btn-secondary">Detail</a></td>
-                                                    </tr>
+                                                    <?php
+
+                                                    require_once "../controllers/OrderController.php";
+                                                    require_once "../configs/connection.php";
+
+                                                    $query = "select o.id, o.order_number, o.status, od.quantity, o.date_departure, od.from_province, od. to_province
+                                                    from orders as o
+                                                    join order_details as od on o.id = od.order_id
+                                                    where user_id=:user_id 
+                                                    order by o.created_at desc";
+                                                    $transactions = getAllOrderByUserId($pdo, $query);
+
+                                                    foreach ($transactions as $key => $value) {
+                                                        $no = $key + 1;
+                                                    ?>
+                                                        <tr>
+                                                            <td>
+                                                                <?= $no ?>
+                                                            </td>
+                                                            <td><?= $value['order_number'] ?></td>
+                                                            <td class="align-middle">
+                                                                <?= $value['quantity'] ?>
+                                                            </td>
+                                                            <td>
+                                                                <?= $value['from_province'] . ' -> ' . $value['to_province'] ?>
+                                                            </td>
+                                                            <td><?= $value['date_departure'] ?></td>
+                                                            <td>
+                                                                <?php
+                                                                require_once "../controllers/OrderController.php";
+                                                                $class = statusOrder($value['status']);
+                                                                ?>
+                                                                <div class="<?= $class ?>"><?= $value['status'] ?></div>
+                                                            </td>
+                                                            <td><a href="<?= $config['base_url'] . 'transactions/detail.php?id=' . $value['id'] ?>" class="btn btn-secondary">Detail</a></td>
+                                                        </tr>
+
+                                                    <?php } ?>
                                                 </tbody>
                                             </table>
                                         </div>
