@@ -1,27 +1,28 @@
 <?php
 
+require_once('../vendor/autoload.php');
+
+use Xendit\Configuration;
+use Xendit\Invoice\InvoiceApi;
+
 function createInvoice($XenditCredential, $orderNumber, $amount)
 {
-    $url = 'https://api.xendit.co/v2/invoices';
+    Configuration::setXenditKey($XenditCredential);
+
+    $apiInstance = new InvoiceApi();
     $data = [
         'external_id' => $orderNumber,
         'amount' => $amount,
         'invoice_duration' => 180,
         'payment_methods' => ["CREDIT_CARD", "BCA", "BNI", "BSI", "BRI", "MANDIRI", "PERMATA", "SAHABAT_SAMPOERNA", "BNC", "OVO", "DANA", "SHOPEEPAY", "LINKAJA", "JENIUSPAY", "DD_BRI", "DD_BCA_KLIKPAY", "KREDIVO", "AKULAKU", "UANGME", "ATOME", "QRIS"]
     ];
-
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/x-www-form-urlencoded',
-        'Authorization: Basic ' . base64_encode($XenditCredential . ':')
-    ]);
-    $response = curl_exec($curl);
-    curl_close($curl);
-
-    return $response;
+    try {
+        $result = $apiInstance->createInvoice($data);
+        return $result;
+    } catch (\Xendit\XenditSdkException $e) {
+        echo 'Exception when calling InvoiceApi->createInvoice: ', $e->getMessage(), PHP_EOL;
+        echo 'Full Error: ', json_encode($e->getFullError()), PHP_EOL;
+    }
 }
 
 function getXenditCredentialKey($pdo)
