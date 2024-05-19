@@ -28,8 +28,8 @@
                     <div class="section-header">
                         <h1>Invoice</h1>
                         <div class="section-header-breadcrumb">
-                            <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                            <div class="breadcrumb-item">Invoice</div>
+                            <div class="breadcrumb-item active"><a href="/">Pesan Tiket</a></div>
+                            <div class="breadcrumb-item">Transaksi</div>
                         </div>
                     </div>
 
@@ -40,15 +40,18 @@
 
                     $id = $_GET['id'];
 
-                    $query = "select o.id, o.order_number, o.status, od.quantity, od.price, o.date_departure, od.from_province, od. to_province, o.created_at, buses.name, o.sub_total, o.grand_total, i.payment_url
+                    $query = "select o.id, o.order_number, o.status, od.quantity, od.price, o.date_departure, od.from_province, od. to_province, o.created_at, buses.name, o.sub_total, o.grand_total, i.payment_url, s.address, s.name
                     from orders as o
                     join order_details as od on o.id = od.order_id
                     join bus_departures as bd on od.bus_departure_id = bd.id
                     join buses on bd.bus_id = buses.id
                     join xendit_invoice_responses as i on o.id = i.order_id
+                    join stations as s on o.station_id = s.id
                     where o.id=:id";
 
                     $transaction = getOrderById($pdo, $query, $id);
+
+                    json_encode($transaction);
                     ?>
 
                     <div class="section-body">
@@ -57,8 +60,7 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="invoice-title">
-                                            <h2>Invoice</h2>
-                                            <!-- <div class="invoice-number"><?= $transaction['order_number'] ?></div> -->
+                                            <h2>Stasiun <?= $transaction['name'] ?></h2>
                                         </div>
                                         <hr>
                                         <div class="row">
@@ -66,6 +68,8 @@
                                                 <address>
                                                     <strong>Nomer Pesanan:</strong><br>
                                                     <?= $transaction['order_number'] ?><br><br>
+                                                    <strong>Alamat :</strong><br>
+                                                    <?= $transaction['address'] ?><br><br>
                                                     <strong>Pembayaran:</strong><br>
                                                     <?php
                                                     require_once "../controllers/OrderController.php";

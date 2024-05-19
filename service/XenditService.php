@@ -41,7 +41,3 @@ function insertXenditInvoiceResponse($pdo, $xenditResponse, $orderId, $amount)
     $stmt = $pdo->prepare("INSERT INTO xendit_invoice_responses (order_id, amount, payment_url, created_at, updated_at) VALUES (?, ?, ?, ?, ?)");
     $stmt->execute([$orderId, $amount, $xenditResponse['invoice_url'], $now, $now]);
 }
-
-function insertXenditRequestAndResponseLog($pdo)
-{
-}
