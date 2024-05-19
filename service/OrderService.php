@@ -15,6 +15,8 @@ function insertOrder($pdo, $orderNumber, $stationId, $userId, $name, $cart, $bus
     $stmt->execute([$id, $orderNumber, $stationId, $userId, $name, 'pending', $subTotal, $grandTotal, $cart['date_departure'], $now, $now]);
 
     insertOrderDetail($pdo, $id, $busDeparture, $cart);
+
+    return array($grandTotal, $id);
 }
 
 function insertOrderDetail($pdo, $id, $busDeparture, $cart)
