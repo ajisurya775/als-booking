@@ -16,6 +16,7 @@ if (isset($_GET['action']) == 'create-order') {
     $stationId = $_GET['station_id'];
     $userId = $_SESSION['id'];
     $name = $_SESSION['name'];
+    $succesRedirectUrl = $config['base_url'] . 'transactions';
 
     $cart = getCartDepartureByUserId($pdo, $userId);
 
@@ -27,7 +28,7 @@ if (isset($_GET['action']) == 'create-order') {
 
     list($amount, $orderId) = insertOrder($pdo, $orderNumber, $stationId, $userId, $name, $cart, $busDeparture);
 
-    $response = createInvoice($xendit['credential_key'], $orderNumber, $amount);
+    $response = createInvoice($xendit['credential_key'], $orderNumber, $amount, $succesRedirectUrl);
 
     $responseData = json_decode($response, true);
 

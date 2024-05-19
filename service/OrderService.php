@@ -31,7 +31,7 @@ function insertOrderDetail($pdo, $id, $busDeparture, $cart)
 function insertOrderChairs($pdo, $orderId, $order)
 {
     $now = date('Y-m-d H:i:s');
-    $startChair = getLastOrderChairs($pdo, $order);
+    $startChair = getLastOrderChairs($pdo);
 
     $stmt = $pdo->prepare("INSERT INTO order_chairs (order_id, order_chairs, created_at, updated_at) VALUES (:order_id, :order_chairs, :created_at, :updated_at)");
     for ($i = 1; $i <= $order['quantity']; $i++) {
@@ -44,21 +44,30 @@ function insertOrderChairs($pdo, $orderId, $order)
 
         $stmt->execute($params);
     }
-
-    return $params;
 }
 
-function getLastOrderChairs($pdo, $order)
+function getLastOrderChairs($pdo)
 {
     $stmt = $pdo->prepare("
     select MAX(oc.order_chairs) as order_chairs
     from order_chairs as oc
     join orders as o on oc.order_id = o.id
-    where o.id=:id
+    where o.status=:status
     order by o.created_at desc
     ");
 
-    $stmt->execute([':id' => $order->id]);
+    $stmt->execute(['status' => 'Paid']);
+
+    return $stmt->fetch();
+}
+
+function getOrderByOrderNumber($pdo, $orderNumber)
+{
+    $stmt = $pdo->prepare("select o.id, od.quantity
+    from orders as o
+    join order_details as od on o.id = od.order_id
+    where order_number=:order_number");
+    $stmt->execute([':order_number' => $orderNumber]);
 
     return $stmt->fetch();
 }
