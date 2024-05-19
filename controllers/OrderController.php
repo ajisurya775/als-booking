@@ -8,6 +8,7 @@ require_once "../service/CartService.php";
 require_once "../Traits/generateOrderNumber.php";
 require_once "../service/OrderService.php";
 require_once "../service/DepartureService.php";
+require_once "../service/XenditService.php";
 
 if (isset($_GET['action']) == 'create-order') {
 
@@ -20,11 +21,19 @@ if (isset($_GET['action']) == 'create-order') {
 
     $orderNumber = createOrderNumber($pdo);
 
+    $xendit = getXenditCredentialKey($pdo);
+
     $busDeparture = getDepartureById($pdo, $departureId);
 
-    $createOrder = insertOrder($pdo, $orderNumber, $stationId, $userId, $name, $cart, $busDeparture);
+    list($amount, $orderId) = insertOrder($pdo, $orderNumber, $stationId, $userId, $name, $cart, $busDeparture);
 
-    header("Location:" . $config['base_url'] . 'transactions');
+    $response = createInvoice($xendit['credential_key'], $orderNumber, $amount);
+
+    $responseData = json_decode($response, true);
+
+    $data = insertXenditInvoiceResponse($pdo, $responseData, $orderId, $amount);
+
+    header("Location:" . $responseData['invoice_url']);
 }
 
 function getAllOrderByUserId($pdo, $query)

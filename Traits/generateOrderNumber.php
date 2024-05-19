@@ -22,7 +22,7 @@ function getLastOrder($pdo)
 {
     $stmt = $pdo->prepare("select * 
     from orders 
-    where month(created_at)=month(current_date) and year(created_at) = year(current_date)");
+    where month(created_at)=month(current_date) and year(created_at) = year(current_date) order by created_at desc");
     $stmt->execute();
 
     $order = $stmt->fetch();
