@@ -33,6 +33,8 @@ if (isset($_GET['action']) == 'create-order') {
 
     $data = insertXenditInvoiceResponse($pdo, $responseData, $orderId, $amount);
 
+    deleteAllCartByUserId($pdo);
+
     header("Location:" . $responseData['invoice_url']);
 }
 

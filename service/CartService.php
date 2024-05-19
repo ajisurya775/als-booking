@@ -33,3 +33,9 @@ function updateCartDeparture($pdo, $userId, $fromProvinceId, $toProvinceId, $dat
         ':updated_at' => $updated_at
     ]);
 }
+
+function deleteAllCartByUserId($pdo)
+{
+    $stmt = $pdo->prepare("delete from cart_departures where user_id=:user_id");
+    $stmt->execute([':user_id' => $_SESSION['id']]);
+}

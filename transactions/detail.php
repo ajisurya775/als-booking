@@ -40,16 +40,15 @@
 
                     $id = $_GET['id'];
 
-                    $query = "select o.id, o.order_number, o.status, od.quantity, od.price, o.date_departure, od.from_province, od. to_province, o.created_at, buses.name, o.sub_total, o.grand_total
+                    $query = "select o.id, o.order_number, o.status, od.quantity, od.price, o.date_departure, od.from_province, od. to_province, o.created_at, buses.name, o.sub_total, o.grand_total, i.payment_url
                     from orders as o
                     join order_details as od on o.id = od.order_id
                     join bus_departures as bd on od.bus_departure_id = bd.id
                     join buses on bd.bus_id = buses.id
+                    join xendit_invoice_responses as i on o.id = i.order_id
                     where o.id=:id";
 
                     $transaction = getOrderById($pdo, $query, $id);
-
-                    // echo json_encode($transaction);
                     ?>
 
                     <div class="section-body">
@@ -147,7 +146,7 @@
                             <div class="text-md-right">
                                 <div class="float-lg-left mb-lg-0 mb-3">
                                     <?php if ($transaction['status'] == 'Pending') { ?>
-                                        <button class="btn btn-primary btn-icon icon-left"><i class="fas fa-credit-card"></i> Process Payment</button>
+                                        <a href="<?= $transaction['payment_url'] ?>" target="_blank" class="btn btn-primary btn-icon icon-left"><i class="fas fa-credit-card"></i> Process Payment</a>
                                     <?php } ?>
                                     <?php if ($transaction['status'] == 'Pending') { ?>
                                         <button class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</button>
