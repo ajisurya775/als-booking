@@ -7,7 +7,7 @@ function createInvoice($XenditCredential, $orderNumber, $amount)
         'external_id' => $orderNumber,
         'amount' => $amount,
         'invoice_duration' => 180,
-        'success_redirect_url' => 'https://haha.com'
+        'payment_methods' => ["CREDIT_CARD", "BCA", "BNI", "BSI", "BRI", "MANDIRI", "PERMATA", "SAHABAT_SAMPOERNA", "BNC", "OVO", "DANA", "SHOPEEPAY", "LINKAJA", "JENIUSPAY", "DD_BRI", "DD_BCA_KLIKPAY", "KREDIVO", "AKULAKU", "UANGME", "ATOME", "QRIS"]
     ];
 
     $curl = curl_init($url);
