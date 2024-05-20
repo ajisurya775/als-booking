@@ -39,14 +39,6 @@ if (isset($_GET['action']) == 'create-order') {
     header("Location:" . $responseData['invoice_url']);
 }
 
-function getAllOrderByUserId($pdo, $query)
-{
-    $stmt = $pdo->prepare($query);
-    $stmt->execute(['user_id' => $_SESSION['id']]);
-
-    return $stmt->fetchAll();
-}
-
 function getOrderById($pdo, $query, $id)
 {
     $stmt = $pdo->prepare($query);
@@ -61,19 +53,4 @@ function getOrderChairNumberByOrderId($pdo, $query, $id)
     $stmt->execute(['order_id' => $id]);
 
     return $stmt->fetchAll();
-}
-
-function statusOrder($status)
-{
-    $class = '';
-    if ($status == 'Pending')
-        $class = 'badge badge-warning';
-    else if ($status == 'Paid')
-        $class = 'badge badge-primary';
-    else if ($status == 'Finish')
-        $class = 'badge badge-success';
-    else
-        $class = 'badge badge-danger';
-
-    return $class;
 }

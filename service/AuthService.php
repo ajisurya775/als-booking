@@ -27,8 +27,8 @@ function register($pdo, $config, $name, $email, $password)
 
 function isEmailAlreadyRegister($pdo, $email)
 {
-    $stmt = $pdo->prepare("select * from users where email=:email");
-    $stmt->execute(['email' => $email]);
+    $stmt = $pdo->prepare("select * from users");
+    $stmt->execute();
 
     return $stmt->fetch();
 }

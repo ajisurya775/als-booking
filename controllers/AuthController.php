@@ -43,14 +43,17 @@ if ($_GET['action'] == 'login') {
 
     $user = isEmailAlreadyRegister($pdo, $email);
 
-    if ($user['password'] && password_verify($password, $user['password'])) {
+    if (password_verify($password, $user['password'])) {
         $_SESSION['id'] = $user['id'];
         $_SESSION['name'] = $user['name'];
         $_SESSION['email'] = $user['email'];
 
+
         header("Location: " . $config['base_url']);
         exit();
     }
+
+    echo "l";
 
     $_SESSION['login_form'] = $_POST;
     $_SESSION['error'] = 'email or password is incorrect';
