@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-    <?php session_start() ?>
     <?php include "../configs/config_url.php" ?>
     <?php include "../components/header.php" ?>
 </head>

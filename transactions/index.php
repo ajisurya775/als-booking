@@ -55,7 +55,6 @@
                                                 <tbody>
                                                     <?php
 
-                                                    require_once "../controllers/OrderController.php";
                                                     require_once "../configs/connection.php";
 
                                                     $query = "select o.id, o.order_number, o.status, od.quantity, o.date_departure, od.from_province, od. to_province
@@ -63,7 +62,11 @@
                                                     join order_details as od on o.id = od.order_id
                                                     where user_id=:user_id 
                                                     order by o.created_at desc";
-                                                    $transactions = getAllOrderByUserId($pdo, $query);
+
+                                                    $stmt = $pdo->prepare($query);
+                                                    $stmt->execute(['user_id' => $_SESSION['id']]);
+     
+                                                    $transactions = $stmt->fetchAll();
 
                                                     foreach ($transactions as $key => $value) {
                                                         $no = $key + 1;
@@ -82,7 +85,7 @@
                                                             <td><?= $value['date_departure'] ?></td>
                                                             <td>
                                                                 <?php
-                                                                require_once "../controllers/OrderController.php";
+                                                                require_once "../Traits/function.php";
                                                                 $class = statusOrder($value['status']);
                                                                 ?>
                                                                 <div class="<?= $class ?>"><?= $value['status'] ?></div>

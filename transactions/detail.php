@@ -36,7 +36,6 @@
                     <?php
 
                     require_once "../configs/connection.php";
-                    require_once "../controllers/OrderController.php";
 
                     $id = $_GET['id'];
 
@@ -49,9 +48,10 @@
                     join stations as s on o.station_id = s.id
                     where o.id=:id";
 
-                    $transaction = getOrderById($pdo, $query, $id);
+                    $stmt = $pdo->prepare($query);
+                    $stmt->execute(['id' => $id]);
 
-                    json_encode($transaction);
+                    $transaction =  $stmt->fetch();
                     ?>
 
                     <div class="section-body">
@@ -72,7 +72,7 @@
                                                     <?= $transaction['address'] ?><br><br>
                                                     <strong>Pembayaran:</strong><br>
                                                     <?php
-                                                    require_once "../controllers/OrderController.php";
+                                                    require_once "../Traits/function.php";
                                                     $class = statusOrder($transaction['status']);
                                                     ?>
                                                     <div class="<?= $class ?>"><?= $transaction['status'] ?></div><br><br>
@@ -121,7 +121,11 @@
                                                 }
 
                                                 $query = "select order_chairs from order_chairs where order_id=:order_id";
-                                                $orderChairs = getOrderChairNumberByOrderId($pdo, $query, $id);
+
+                                                $stmt = $pdo->prepare($query);
+                                                $stmt->execute(['order_id' => $id]);
+
+                                                $orderChairs = $stmt->fetchAll();
 
                                                 $chairs = implode(",", array_column($orderChairs, 'order_chairs'));
 

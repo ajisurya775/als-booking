@@ -105,7 +105,7 @@
     </div>
     </section>
   </div>
-  <?php include "components/" ?>
+  <?php include "components/footer.php" ?>
   </div>
   </div>
 
