@@ -39,7 +39,7 @@
 
                     $id = $_GET['id'];
 
-                    $query = "select o.id, o.order_number, o.status, od.quantity, od.price, o.date_departure, od.from_province, od. to_province, o.created_at, buses.name, o.sub_total, o.grand_total, i.payment_url, s.address, s.name
+                    $query = "select o.id, o.order_number, o.status, od.quantity, od.price, o.date_departure, od.from_province, od. to_province, o.created_at, buses.name, o.sub_total, o.grand_total, i.payment_url, s.address, s.name as station
                     from orders as o
                     join order_details as od on o.id = od.order_id
                     join bus_departures as bd on od.bus_departure_id = bd.id
@@ -60,7 +60,7 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="invoice-title">
-                                            <h2>Stasiun <?= $transaction['name'] ?></h2>
+                                            <h2>Stasiun <?= $transaction['station'] ?></h2>
                                         </div>
                                         <hr>
                                         <div class="row">
@@ -106,7 +106,7 @@
                                                     <td class="text-center"><?= $transaction['from_province'] ?></td>
                                                     <td class="text-center"><?= $transaction['to_province'] ?></td>
                                                     <td class="text-right"><?= $transaction['quantity'] ?></td>
-                                                    <td class="text-right"><?= $transaction['price'] ?></td>
+                                                    <td class="text-right"><?= number_format($transaction['price'], 2, ',', '.') ?></td>
                                                 </tr>
 
 
@@ -120,30 +120,45 @@
                                                 <?php
                                                 }
 
-                                                $query = "select order_chairs from order_chairs where order_id=:order_id";
+                                                $query = "select oc.order_chairs, b.code
+                                                from order_chairs as oc
+                                                join order_details as od on oc.order_id = od.order_id
+                                                join bus_departures as bd on od.bus_departure_id = bd.id
+                                                join buses as b on bd.bus_id = b.id
+                                                where od.order_id=:order_id";
 
                                                 $stmt = $pdo->prepare($query);
                                                 $stmt->execute(['order_id' => $id]);
 
                                                 $orderChairs = $stmt->fetchAll();
 
-                                                $chairs = implode(",", array_column($orderChairs, 'order_chairs'));
+                                                // $chairs = implode(",", array_column($orderChairs, 'order_chairs'));
 
                                                 ?>
                                                 <?php if ($transaction['status'] == 'Paid' || $transaction['status'] == 'Finish') { ?>
-                                                    <p>Nomer kursi Anda adalah <?= $transaction['status'] == 'Pending' ? '' : $chairs ?></p>
+                                                    <table class="table table-striped table-hover table-md">
+                                                        <tr>
+                                                            <th class="text-left"> Nomer</th>
+                                                        </tr>
+                                                        <?php foreach ($orderChairs as $key => $value) { ?>
+                                                            <tr>
+                                                                <td><?= $value['code'] . $value['order_chairs'] ?></td>
+                                                            </tr>
+                                                        <?php } ?>
+                                                        </tbody>
+                                                    </table>
                                                 <?php } ?>
                                             </div>
 
                                             <div class="col-lg-4 text-right">
                                                 <div class="invoice-detail-item">
                                                     <div class="invoice-detail-name">Subtotal</div>
-                                                    <div class="invoice-detail-value">Rp <?= (int)$transaction['sub_total'] ?></div>
+                                                    <div class="invoice-detail-value">Rp <?= number_format($transaction['sub_total'], 2, ',', '.') ?></div>
                                                 </div>
                                                 <hr class="mt-2 mb-2">
                                                 <div class="invoice-detail-item">
                                                     <div class="invoice-detail-name">Grand Total</div>
-                                                    <div class="invoice-detail-value invoice-detail-value-lg">Rp <?= (int)$transaction['grand_total'] ?></div>
+                                                    <div class="invoice-detail-value invoice-detail-value-lg">Rp <?= number_format($transaction['grand_total'], 2, ',', '.') ?></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -157,10 +172,10 @@
                                         <a href="<?= $transaction['payment_url'] ?>" target="_blank" class="btn btn-primary btn-icon icon-left"><i class="fas fa-credit-card"></i> Process Payment</a>
                                     <?php } ?>
                                     <?php if ($transaction['status'] == 'Pending') { ?>
-                                        <button class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</button>
+                                        <a class="btn btn-danger btn-icon icon-left" href="<?= $config['base_url'] . 'controllers/InvoiceController.php?action=changeStatus&order_number=' . $transaction['order_number'] ?>"><i class="fas fa-times"></i> Cancel</a>
                                     <?php } ?>
                                 </div>
-                                <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
+                                <a class="btn btn-warning btn-icon icon-left" href="<?= $config['base_url'] . 'controllers/PdfController.php?id=' . $transaction['id'] ?>"><i class="fas fa-download"></i> Download</a>
                             </div>
                         </div>
                     </div>
