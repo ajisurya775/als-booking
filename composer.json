@@ -6,6 +6,7 @@
       }
     ],
     "require": {
-      "xendit/xendit-php": "5.0.0"
+      "xendit/xendit-php": "5.0.0",
+        "dompdf/dompdf": "^3.0"
     }
   }

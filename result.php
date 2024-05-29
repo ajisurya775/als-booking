@@ -39,25 +39,55 @@
 
                             $fromProvinceId = $_GET['from_province_id'];
                             $toProvinceId = $_GET['to_province_id'];
+                            $date = $_GET['date_departure'];
+                            $quantity = $_GET['quantity'];
 
                             $stmt = $pdo->prepare("
-                            select bus_departures.id,bus_departures.station_id, buses.name, buses.capacity, bus_departures.price, departure_hours.hour, buses.asset_url
-                            from bus_departures
-                            join departure_hours on bus_departures.departure_hour_id = departure_hours.id
-                            join buses on bus_departures.bus_id = buses.id
-                            where from_province_id=:from_province_id 
-                            and to_province_id=:to_province_id
+                            SELECT 
+                                bd.id,
+                                bd.station_id,
+                                b.name,
+                                b.capacity,
+                                bd.price,
+                                dh.hour,
+                                b.asset_url,
+                                COALESCE(od.amount, 0) AS amount
+                            FROM 
+                                bus_departures bd
+                            JOIN 
+                                departure_hours dh ON bd.departure_hour_id = dh.id
+                            JOIN 
+                                buses b ON bd.bus_id = b.id
+                            LEFT JOIN 
+                                (SELECT bus_departure_id, SUM(quantity) AS amount
+                                FROM order_details as od
+                                join orders as o on od.order_id = o.id
+                                where o.date_departure = :date and 
+                                o.status = 'Paid'
+                                GROUP BY bus_departure_id) od ON bd.id = od.bus_departure_id
+                            WHERE 
+                                bd.from_province_id = :from_province_id 
+                                AND bd.to_province_id = :to_province_id
+                            ORDER BY 
+                                amount DESC;
+
                              ");
 
                             $stmt->execute([
                                 ':from_province_id' => $fromProvinceId,
-                                ':to_province_id' => $toProvinceId
+                                ':to_province_id' => $toProvinceId,
+                                ':date' => $date
                             ]);
 
                             $departures = $stmt->fetchAll();
+
+                            // echo json_encode($departures);
                             ?>
 
-                            <?php foreach ($departures as $key => $value) { ?>
+                            <?php foreach ($departures as $key => $value) {
+                                $total = $value['capacity'] - $value['amount'];
+
+                            ?>
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                                     <article class="article">
                                         <div class="article-header">
@@ -69,11 +99,12 @@
                                         </div>
                                         <div class="article-details">
                                             <form action="<?= $config['base_url'] . 'controllers/OrderController.php?action=create-order&departure_id=' . $value['id'] . '&station_id=' . $value['station_id'] ?>" method="post">
-                                                <p>Harga Rp. <?= (int)$value['price'] ?></p>
-                                                <p>Sisa Kursi <?= $value['capacity'] ?></p>
+                                                <p>Harga Rp. <?= number_format($value['price'], 2, ',', '.') ?></p>
+                                                <p>Sisa Kursi <?= $total ?></p>
                                                 <p>Jadwal <?= $value['hour'] ?></p>
                                                 <div class="article-cta">
-                                                    <button type="submit" class="btn btn-primary">Pesan Sekarang</button>
+                                                    <?php $calss =  $total < $quantity ? 'd-none' : '' ?>
+                                                    <button type="submit" class="btn btn-primary <?= $calss ?>">Pesan Sekarang</button>
                                                 </div>
                                             </form>
 

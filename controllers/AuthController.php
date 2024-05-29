@@ -2,7 +2,6 @@
 
 session_start();
 
-require_once '../configs/error_config.php';
 require_once '../configs/config_url.php';
 require_once '../configs/connection.php';
 require_once '../service/AuthService.php';

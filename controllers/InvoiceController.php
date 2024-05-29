@@ -1,6 +1,5 @@
 <?php
 
-require_once "../configs/error_config.php";
 require_once '../configs/config_url.php';
 require_once "../configs/connection.php";
 require_once "../service/XenditService.php";
@@ -47,4 +46,12 @@ function updateStatusOrderByOrderNumber($pdo, $orderNumber, $status)
     ]);
 
     return $stmt->fetch();
+}
+
+if (isset($_GET['action']) && $_GET['action'] == 'changeStatus') {
+    $orderNumber = $_GET['order_number'];
+
+    updateStatusOrderByOrderNumber($pdo, $orderNumber, 'Cancle');
+
+    header("Location:" . '../transactions');
 }
