@@ -87,27 +87,32 @@ $id = $_GET['id'];
 
 
 $query = "SELECT 
-                o.id, o.order_number,
-                o.name AS name_user, 
-                o.status, 
-                od.quantity, 
-                od.price, 
-                o.date_departure, 
-                od.from_province, od.to_province, 
-                o.created_at, 
-                buses.name AS bus_name, 
-                o.sub_total, 
-                o.grand_total, 
-                i.payment_url, 
-                s.address, 
-                s.name AS station
-              FROM orders AS o
-              JOIN order_details AS od ON o.id = od.order_id
-              JOIN bus_departures AS bd ON od.bus_departure_id = bd.id
-              JOIN buses ON bd.bus_id = buses.id
-              JOIN xendit_invoice_responses AS i ON o.id = i.order_id
-              JOIN stations AS s ON o.station_id = s.id
-              WHERE o.id = :id";
+o.id, o.order_number,
+o.name AS name_user, 
+o.status, 
+od.quantity, 
+od.price, 
+o.date_departure, 
+od.from_province, od.to_province, 
+o.created_at, 
+buses.name AS bus_name, 
+o.sub_total, 
+o.grand_total, 
+i.payment_url, 
+s.address, 
+s.name AS station,
+bc.name as class,
+c.phone_number,
+c.fax_number
+FROM orders AS o
+JOIN order_details AS od ON o.id = od.order_id
+JOIN bus_departures AS bd ON od.bus_departure_id = bd.id
+JOIN buses ON bd.bus_id = buses.id
+JOIN xendit_invoice_responses AS i ON o.id = i.order_id
+JOIN stations AS s ON o.station_id = s.id
+join bus_classes as bc on buses.bus_class_id = bc.id
+join companies as c on buses.company_id = c.id
+WHERE o.id = :id";
 $stmt = $pdo->prepare($query);
 $stmt->execute(['id' => $id]);
 
@@ -143,11 +148,11 @@ $chair = implode($chairNumbers);
 <body>
     <div class="ticket-box">
         <div class="header">
-            <h1>Super Executive</h1>
+            <h1><?= $data['class'] ?></h1>
             <div class="sub-title">ALS</div>
-            <div>Jl. Sisingamangaraja Km. 6,5</div>
+            <div><?= $data['address'] ?></div>
             <div>Medan - Indonesia</div>
-            <div>Tel: (061) 7866685 | Fax: (061) 7866744</div>
+            <div>Tel: <?= $data['phone_number'] ?> | Fax: <?= $data['fax_number'] ?></div>
         </div>
 
         <table class="details">

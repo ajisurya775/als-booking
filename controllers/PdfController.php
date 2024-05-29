@@ -11,34 +11,38 @@ try {
     $options->set('isRemoteEnabled', true);
 
     $dompdf = new Dompdf($options);
-
+    $id = $_GET['id'];
 
     $query = "SELECT 
-                o.id, o.order_number,
-                o.name AS name_user, 
-                o.status, 
-                od.quantity, 
-                od.price, 
-                o.date_departure, 
-                od.from_province, od.to_province, 
-                o.created_at, 
-                buses.name AS bus_name, 
-                o.sub_total, 
-                o.grand_total, 
-                i.payment_url, 
-                s.address, 
-                s.name AS station
-              FROM orders AS o
-              JOIN order_details AS od ON o.id = od.order_id
-              JOIN bus_departures AS bd ON od.bus_departure_id = bd.id
-              JOIN buses ON bd.bus_id = buses.id
-              JOIN xendit_invoice_responses AS i ON o.id = i.order_id
-              JOIN stations AS s ON o.station_id = s.id
-              WHERE o.id = :id";
+    o.id, o.order_number,
+    o.name AS name_user, 
+    o.status, 
+    od.quantity, 
+    od.price, 
+    o.date_departure, 
+    od.from_province, od.to_province, 
+    o.created_at, 
+    buses.name AS bus_name, 
+    o.sub_total, 
+    o.grand_total, 
+    i.payment_url, 
+    s.address, 
+    s.name AS station,
+    bc.name as class,
+    c.phone_number,
+    c.fax_number
+    FROM orders AS o
+    JOIN order_details AS od ON o.id = od.order_id
+    JOIN bus_departures AS bd ON od.bus_departure_id = bd.id
+    JOIN buses ON bd.bus_id = buses.id
+    JOIN xendit_invoice_responses AS i ON o.id = i.order_id
+    JOIN stations AS s ON o.station_id = s.id
+    join bus_classes as bc on buses.bus_class_id = bc.id
+    join companies as c on buses.company_id = c.id
+    WHERE o.id = :id";
     $stmt = $pdo->prepare($query);
     $stmt->execute(['id' => $id]);
 
-    // Fetch the main data
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$data) {
@@ -57,15 +61,16 @@ try {
     $orderChairs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $chairNumbers = array_map(function ($chair) {
-        return $chair['order_chairs'];
+        return '[' . $chair['code'] . '-' . $chair['order_chairs'] . ']';
     }, $orderChairs);
 
-    $busCode = !empty($orderChairs) ? $orderChairs[0]['code'] : '';
+    $chairs = implode(' ', $chairNumbers);
+
+    $busCode = $data['bus_name'];
 
     $html = '
     <!DOCTYPE html>
     <html>
-
     <head>
         <title>Ticket</title>
         <style>
@@ -76,7 +81,6 @@ try {
                 color: #000;
                 background: #fff;
             }
-
             .ticket-box {
                 width: 100%;
                 max-width: 800px;
@@ -84,50 +88,41 @@ try {
                 padding: 20px;
                 position: relative;
             }
-
             .header {
                 text-align: center;
                 margin-bottom: 20px;
             }
-
             .header h1 {
                 margin: 0;
                 font-size: 24px;
                 text-transform: uppercase;
             }
-
             .header .sub-title {
                 font-size: 18px;
             }
-
             .details {
                 width: 100%;
                 border-collapse: collapse;
                 margin-bottom: 20px;
             }
-
-            .details td,
-            .details th {
+            .details td, .details th {
                 border: 1px solid #000;
                 padding: 8px;
             }
-
             .details th {
                 background: #eee;
                 text-align: left;
             }
-
             .footer {
                 position: absolute;
                 bottom: 10px;
                 width: 100%;
                 text-align: left;
             }
-
             .stamp {
                 position: absolute;
                 left: 20px;
-                top: 180px;
+                top: 120px;
                 transform: rotate(-20deg);
                 font-size: 24px;
                 color: blue;
@@ -135,13 +130,11 @@ try {
                 padding: 5px 10px;
                 border-radius: 5px;
             }
-
             .seat-number {
                 text-align: center;
                 font-size: 18px;
                 margin-top: 10px;
             }
-
             .bus-code {
                 text-align: center;
                 font-size: 18px;
@@ -149,17 +142,15 @@ try {
             }
         </style>
     </head>
-
     <body>
         <div class="ticket-box">
             <div class="header">
-                <h1>Super Executive</h1>
+                <h1>' . htmlspecialchars($data['class']) . '</h1>
                 <div class="sub-title">ALS</div>
-                <div>Jl. Sisingamangaraja Km. 6,5</div>
+                <div>' . htmlspecialchars($data['address']) . '</div>
                 <div>Medan - Indonesia</div>
-                <div>Tel: (061) 7866685 | Fax: (061) 7866744</div>
+                <div>Tel: ' . htmlspecialchars($data['phone_number']) . ' | Fax: ' . htmlspecialchars($data['fax_number']) . '</div>
             </div>
-
             <table class="details">
                 <tr>
                     <th>Tanggal</th>
@@ -180,38 +171,26 @@ try {
                     <td>Rp ' . number_format($data['grand_total'], 2, ',', '.') . '</td>
                 </tr>
             </table>
-
             <div class="stamp">Lunas</div>
-
             <div class="seat-number">
-                <strong>No. Tempat Duduk</strong><br>' . implode(', ', $chairNumbers) . '
+                <strong>No. Tempat Duduk</strong><br>' . $chairs . '
             </div>
-
-            <div class="bus-code">
-                <strong>Kode Bus</strong><br>' . htmlspecialchars($busCode) . '
-            </div>
-
             <div class="footer">
                 <div>Medan, ' . date('d-m-Y', strtotime($data['created_at'])) . '</div>
                 <div>Petugas</div>
             </div>
         </div>
     </body>
-
     </html>
     ';
 
-    // Load the HTML content
     $dompdf->loadHtml($html);
 
-    // Set the paper size and orientation to landscape
     $dompdf->setPaper('A4', 'landscape');
 
-    // Render the HTML as PDF
     $dompdf->render();
 
-    // Output the generated PDF (1 = download and 0 = preview)
-    $dompdf->stream("ticket.pdf", ["Attachment" => 1]);
+    $dompdf->stream("ticket.pdf", ["Attachment" => 0]);
 } catch (Exception $e) {
     echo 'Error: ' . $e->getMessage();
 }

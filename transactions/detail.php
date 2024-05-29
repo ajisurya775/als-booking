@@ -120,35 +120,53 @@
                                                 <?php
                                                 }
 
-                                                $query = "select oc.order_chairs, b.code
-                                                from order_chairs as oc
-                                                join order_details as od on oc.order_id = od.order_id
-                                                join bus_departures as bd on od.bus_departure_id = bd.id
-                                                join buses as b on bd.bus_id = b.id
-                                                where od.order_id=:order_id";
+                                                $query = "SELECT oc.order_chairs, b.code
+                                                            FROM order_chairs AS oc
+                                                            JOIN order_details AS od ON oc.order_id = od.order_id
+                                                            JOIN bus_departures AS bd ON od.bus_departure_id = bd.id
+                                                            JOIN buses AS b ON bd.bus_id = b.id
+                                                            WHERE od.order_id = :order_id";
 
                                                 $stmt = $pdo->prepare($query);
                                                 $stmt->execute(['order_id' => $id]);
 
-                                                $orderChairs = $stmt->fetchAll();
+                                                $orderChairs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                                                // $chairs = implode(",", array_column($orderChairs, 'order_chairs'));
+                                                $chairNumbers = array_map(function ($orderChair) {
+                                                    return '<span class="chair">' . $orderChair['code'] . '-' . $orderChair['order_chairs'] . '</span>';
+                                                }, $orderChairs);
+
+                                                $chairs = implode(' ', $chairNumbers);
 
                                                 ?>
                                                 <?php if ($transaction['status'] == 'Paid' || $transaction['status'] == 'Finish') { ?>
-                                                    <table class="table table-striped table-hover table-md">
-                                                        <tr>
-                                                            <th class="text-left"> Nomer</th>
-                                                        </tr>
-                                                        <?php foreach ($orderChairs as $key => $value) { ?>
-                                                            <tr>
-                                                                <td><?= $value['code'] . $value['order_chairs'] ?></td>
-                                                            </tr>
-                                                        <?php } ?>
-                                                        </tbody>
-                                                    </table>
+                                                    <div class="chairs-container"><?= $chairs ?></div>
                                                 <?php } ?>
                                             </div>
+
+                                            <style>
+                                                .section-title {
+                                                    font-size: 24px;
+                                                    font-weight: bold;
+                                                    margin-bottom: 10px;
+                                                }
+
+                                                .chairs-container {
+                                                    display: flex;
+                                                    flex-wrap: wrap;
+                                                    gap: 10px;
+                                                }
+
+                                                .chair {
+                                                    background-color: #f0f0f0;
+                                                    border: 1px solid #ccc;
+                                                    border-radius: 5px;
+                                                    padding: 5px 10px;
+                                                    font-size: 16px;
+                                                    font-weight: bold;
+                                                }
+                                            </style>
+
 
                                             <div class="col-lg-4 text-right">
                                                 <div class="invoice-detail-item">

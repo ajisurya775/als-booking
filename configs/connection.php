@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 
 $host = "localhost";
 $dbname = "booking_bus";
-$username = "mylocalhost";
+$username = "root";
 $password = "root";
 
 try {
