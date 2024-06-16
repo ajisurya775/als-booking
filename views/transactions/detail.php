@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <?php include "../configs/config_url.php" ?>
+    <?php include "../../configs/config_url.php" ?>
     <?php include "../components/header.php" ?>
 </head>
 
@@ -35,7 +35,7 @@
 
                     <?php
 
-                    require_once "../configs/connection.php";
+                    require_once "../../configs/connection.php";
 
                     $id = $_GET['id'];
 
@@ -72,7 +72,7 @@
                                                     <?= $transaction['address'] ?><br><br>
                                                     <strong>Pembayaran:</strong><br>
                                                     <?php
-                                                    require_once "../Traits/function.php";
+                                                    require_once "../../Traits/function.php";
                                                     $class = statusOrder($transaction['status']);
                                                     ?>
                                                     <div class="<?= $class ?>"><?= $transaction['status'] ?></div><br><br>

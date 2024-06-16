@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <?php include "../configs/config_url.php" ?>
+    <?php include "../../configs/config_url.php" ?>
     <?php include "../components/header.php" ?>
 </head>
 
@@ -74,7 +74,7 @@
                                         </button>
                                     </div>
 
-                                    Don't have an account? <a href="<?= $config['base_url'] . 'auth/register.php' ?>">Create One</a>
+                                    Don't have an account? <a href="<?= $config['base_url'] . 'views/auth/register.php' ?>">Create One</a>
 
                                 </form>
 
@@ -90,7 +90,7 @@
     </div>
     </div>
 
-    <?php include "../components/script.php" ?>
+    <?php include "../../components/script.php" ?>
 
 </body>
 

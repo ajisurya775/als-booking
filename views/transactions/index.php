@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <?php include "../configs/config_url.php" ?>
+    <?php include "../../configs/config_url.php" ?>
     <?php include "../components/header.php" ?>
 </head>
 
@@ -55,7 +55,7 @@
                                                 <tbody>
                                                     <?php
 
-                                                    require_once "../configs/connection.php";
+                                                    require_once "../../configs/connection.php";
 
                                                     $query = "select o.id, o.order_number, o.status, od.quantity, o.date_departure, od.from_province, od. to_province
                                                     from orders as o
@@ -65,7 +65,7 @@
 
                                                     $stmt = $pdo->prepare($query);
                                                     $stmt->execute(['user_id' => $_SESSION['id']]);
-     
+
                                                     $transactions = $stmt->fetchAll();
 
                                                     foreach ($transactions as $key => $value) {
@@ -85,12 +85,12 @@
                                                             <td><?= $value['date_departure'] ?></td>
                                                             <td>
                                                                 <?php
-                                                                require_once "../Traits/function.php";
+                                                                require_once "../../Traits/function.php";
                                                                 $class = statusOrder($value['status']);
                                                                 ?>
                                                                 <div class="<?= $class ?>"><?= $value['status'] ?></div>
                                                             </td>
-                                                            <td><a href="<?= $config['base_url'] . 'transactions/detail.php?id=' . $value['id'] ?>" class="btn btn-secondary">Detail</a></td>
+                                                            <td><a href="<?= $config['base_url'] . 'views/transactions/detail.php?id=' . $value['id'] ?>" class="btn btn-secondary">Detail</a></td>
                                                         </tr>
 
                                                     <?php } ?>

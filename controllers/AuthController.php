@@ -16,7 +16,7 @@ if ($_GET['action'] == 'register') {
     if ($password != $passwordConfirm) {
         $_SESSION['register_form'] = $_POST;
         $_SESSION['error'] = 'Password not match';
-        header('Location:' . $config['base_url'] . 'auth/register.php');
+        header('Location:' . $config['base_url'] . 'views/auth/register.php');
         exit();
     }
 
@@ -25,7 +25,7 @@ if ($_GET['action'] == 'register') {
     if ($isEmail) {
         $_SESSION['register_form'] = $_POST;
         $_SESSION['error'] = 'Email already register';
-        header('Location:' . $config['base_url'] . 'auth/register.php');
+        header('Location:' . $config['base_url'] . 'views/auth/register.php');
         exit();
     }
 
@@ -46,13 +46,14 @@ if ($_GET['action'] == 'login') {
         $_SESSION['id'] = $user['id'];
         $_SESSION['name'] = $user['name'];
         $_SESSION['email'] = $user['email'];
+        $_SESSION['role'] = $user['role'];
 
-
-        header("Location: " . $config['base_url']);
+        if ($user['role'] == 'user')
+            header("Location: " . $config['base_url']);
+        else
+            header("Location: " . $config['base_url'] . 'views/admin/dashboard');
         exit();
     }
-
-    echo "l";
 
     $_SESSION['login_form'] = $_POST;
     $_SESSION['error'] = 'email or password is incorrect';
@@ -61,5 +62,5 @@ if ($_GET['action'] == 'login') {
 
 if ($_GET['action'] == 'logout') {
     session_destroy();
-    header('Location:' . $config['base_url'] . 'auth/login.php');
+    header('Location:' . $config['base_url'] . 'views/auth/login.php');
 }

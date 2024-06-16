@@ -68,6 +68,10 @@ try {
 
     $busCode = $data['bus_name'];
 
+    $stamplePaid = '';
+    if ($data['status'] == 'Paid' || $data['status'] == 'Finish')
+        $stamplePaid = ' <div class="stamp">Lunas</div>';
+
     $html = '
     <!DOCTYPE html>
     <html>
@@ -171,7 +175,7 @@ try {
                     <td>Rp ' . number_format($data['grand_total'], 2, ',', '.') . '</td>
                 </tr>
             </table>
-            <div class="stamp">Lunas</div>
+           ' . $stamplePaid . '
             <div class="seat-number">
                 <strong>No. Tempat Duduk</strong><br>' . $chairs . '
             </div>

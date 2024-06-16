@@ -53,5 +53,5 @@ if (isset($_GET['action']) && $_GET['action'] == 'changeStatus') {
 
     updateStatusOrderByOrderNumber($pdo, $orderNumber, 'Cancle');
 
-    header("Location:" . '../transactions');
+    header("Location:" . '../views/transactions');
 }
