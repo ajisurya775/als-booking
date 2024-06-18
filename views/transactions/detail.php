@@ -64,23 +64,40 @@
                                         </div>
                                         <hr>
                                         <div class="row">
-                                            <div class="col-md-6">
-                                                <address>
-                                                    <strong>Nomer Pesanan:</strong><br>
-                                                    <?= $transaction['order_number'] ?><br><br>
-                                                    <strong>Alamat :</strong><br>
-                                                    <?= $transaction['address'] ?><br><br>
-                                                    <strong>Pembayaran:</strong><br>
-                                                    <?php
-                                                    require_once "../../Traits/function.php";
-                                                    $class = statusOrder($transaction['status']);
-                                                    ?>
-                                                    <div class="<?= $class ?>"><?= $transaction['status'] ?></div><br><br>
-                                                    <strong>Tanggal Keberangkatan:</strong><br>
-                                                    <?= $transaction['date_departure'] ?><br><br>
-                                                    <strong>Tanggal Dibuat:</strong><br>
-                                                    <?= date('Y/m/d H:i:s', strtotime($transaction['created_at'])); ?><br><br>
-                                                </address>
+                                            <div class="col-lg-12">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <address>
+                                                            <strong>Nomer Pesanan:</strong><br>
+                                                            <?= $transaction['order_number'] ?><br><br>
+                                                            <strong>Alamat :</strong><br>
+                                                            <?= $transaction['address'] ?><br><br>
+                                                            <strong>Pembayaran:</strong><br>
+                                                            <?php
+                                                            require_once "../../Traits/function.php";
+                                                            $class = statusOrder($transaction['status']);
+                                                            ?>
+                                                            <div class="<?= $class ?>"><?= $transaction['status'] ?></div><br><br>
+                                                            <strong>Tanggal Keberangkatan:</strong><br>
+                                                            <?= $transaction['date_departure'] ?><br><br>
+                                                            <strong>Tanggal Dibuat:</strong><br>
+                                                            <?= date('Y/m/d H:i:s', strtotime($transaction['created_at'])); ?><br><br>
+                                                        </address>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <strong>Invoice Qr:</strong><br>
+                                                        <?php
+
+                                                        require_once "../../controllers/QrController.php";
+
+                                                        $path = __DIR__ . '/../../assets/img/qr/' . $transaction['id'] . '.svg';
+
+                                                        $qr = generateQrCode($transaction['id'], $path);
+
+                                                        ?>
+                                                        <img src="<?= $config['base_url'] . 'assets/img/qr/' . $transaction['id'] . '.svg' ?>" width="50%" alt="">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
