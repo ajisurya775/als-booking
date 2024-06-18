@@ -24,8 +24,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'update') {
 
     $request = $_POST;
 
-    // echo json_encode($request);
-
     $id = $_POST['id'];
 
     $busService = new BusService;

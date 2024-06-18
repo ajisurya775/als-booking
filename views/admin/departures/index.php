@@ -46,6 +46,7 @@
                                                         </th>
                                                         <th>Bus</th>
                                                         <th>Class</th>
+                                                        <th>Departure Hour</th>
                                                         <th>From</th>
                                                         <th>To</th>
                                                         <th>Price</th>
@@ -59,18 +60,21 @@
                                                     require_once "../../../configs/connection.php";
 
                                                     $query = "SELECT 
-                                                    b.id,
+                                                    bd.id,
                                                     b.name,
                                                     bc.name AS class,
                                                     from_prov.name AS from_province,
                                                     to_prov.name AS to_province,
                                                     bd.price,
-                                                    bd.status
+                                                    bd.status,
+                                                    dh.hour
                                                 FROM bus_departures AS bd
                                                 JOIN buses AS b ON bd.bus_id = b.id
                                                 JOIN provinces AS from_prov ON bd.from_province_id = from_prov.id
                                                 JOIN provinces AS to_prov ON bd.to_province_id = to_prov.id
                                                 JOIN bus_classes AS bc ON b.bus_class_id = bc.id
+                                                join departure_hours as dh on bd.departure_hour_id = dh.id
+                                                order by bd.created_at desc
                                                 ";
 
                                                     $stmt = $pdo->prepare($query);
@@ -86,14 +90,15 @@
                                                                 <?= $no ?>
                                                             </td>
                                                             <td><?= $value['name'] ?></td>
+                                                            <td><?= $value['class'] ?></td>
                                                             <td class="align-middle">
-                                                                <?= $value['class'] ?>
+                                                                <?= $value['hour'] ?>
                                                             </td>
                                                             <td>
                                                                 <?= $value['from_province'] ?>
                                                             </td>
                                                             <td><?= $value['to_province'] ?></td>
-                                                            <td><?= $value['price'] ?></td>
+                                                            <td>Rp. <?= number_format($value['price'], 0, ',', '.') ?></td>
                                                             <td>
                                                                 <?php
                                                                 require '../../../Traits/function.php';
@@ -102,12 +107,11 @@
                                                                 if ($value['status'] == 1)
                                                                     $statuName = 'Active';
                                                                 else
-                                                                    $statuName = 'Inactive';
+                                                                    $statuName = 'InActive';
                                                                 ?>
-                                                                <div class="<?= $class ?>"><?= $statuName ?></div>
+                                                                <a href="<?= $config['base_url'] . 'controllers/DepartureController.php?action=changeStatus&id=' . $value['id'] . '&status=' . $value['status'] ?>" class="<?= $class ?>"><?= $statuName ?></a>
                                                             </td>
                                                             <td>
-                                                                <button class="btn btn-secondary">Detail</button>
                                                                 <a href="<?= $config['base_url'] . 'views/admin/departures/update.php?id=' . $value['id'] ?>" class="btn btn-primary">Update</a>
                                                             </td>
                                                         </tr>

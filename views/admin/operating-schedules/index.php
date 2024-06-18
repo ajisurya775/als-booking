@@ -34,7 +34,7 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <a href="#" class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#createProvinces"><i class="far fa-edit"></i> Create Provinces</a>
+                                        <a href="#" class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#createProvinces"><i class="far fa-edit"></i> Create Operatings</a>
 
                                     </div>
                                     <div class="card-body">
@@ -95,7 +95,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Create Bus</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Create Operating</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -105,7 +105,7 @@
 
                             <div class="form-group">
                                 <label for="name">Name Provinces</label>
-                                <input id="name" type="name" class="form-control" name="name" tabindex="1" required autofocus>
+                                <input id="name" type="time" class="form-control" name="name" tabindex="1" required autofocus>
                                 <div class="invalid-feedback">
                                     Please fill in your name provinces
                                 </div>
