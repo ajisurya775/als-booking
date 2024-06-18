@@ -25,7 +25,7 @@
 
                 <li class=<?= strpos($actual_link, "views/admin/departures/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/admin/departures' ?>"><i class="fa fa-map-marker" aria-hidden="true"></i><span>Departures</span></a></li>
 
-                <!-- <li class=<?= strpos($actual_link, "views/admin/provinces/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/admin/provinces' ?>"><i class="fa fa-map" aria-hidden="true"></i> <span>Provinces</span></a></li> -->
+                <li class=<?= strpos($actual_link, "views/admin/provinces/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/admin/provinces' ?>"><i class="fa fa-map" aria-hidden="true"></i> <span>Provinces</span></a></li>
 
                 <li class=<?= strpos($actual_link, "views/admin/operating-schedules/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/admin/operating-schedules' ?>"><i class="fa fa-clock" aria-hidden="true"></i> <span>Operating Schedule</span></a></li>
 

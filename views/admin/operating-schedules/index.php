@@ -55,7 +55,7 @@
 
                                                     require_once "../../../configs/connection.php";
 
-                                                    $query = "SELECT * FROM departure_hours";
+                                                    $query = "SELECT * FROM departure_hours order by created_at desc";
 
                                                     $stmt = $pdo->prepare($query);
                                                     $stmt->execute();
@@ -69,12 +69,12 @@
                                                             <td>
                                                                 <?= $no ?>
                                                             </td>
-                                                            <td><?= $value['hour'] ?></td>
+                                                            <td><?= substr($value['hour'], 0, 5) ?></td>
                                                             <td>
                                                                 <div><?= $value['created_at'] ?></div>
                                                             </td>
                                                             <td>
-                                                                <a href="#" class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#createProvinces"> Update</a>
+                                                                <a href="#" class="btn btn-icon icon-left btn-primary" data-toggle="modal" data-target="#detail<?= $value['id'] ?>"> Update</a>
                                                             </td>
                                                         </tr>
 
@@ -101,13 +101,13 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" action="<?= $config['base_url'] . 'controllers/AuthController.php?action=login' ?>" class="needs-validation" novalidate="">
+                        <form method="POST" action="<?= $config['base_url'] . 'controllers/OperatingController.php?action=create' ?>" class="needs-validation" novalidate="">
 
                             <div class="form-group">
-                                <label for="name">Name Provinces</label>
-                                <input id="name" type="time" class="form-control" name="name" tabindex="1" required autofocus>
+                                <label for="name">Hour</label>
+                                <input id="name" type="time" class="form-control" name="hour" tabindex="1" required autofocus>
                                 <div class="invalid-feedback">
-                                    Please fill in your name provinces
+                                    Please fill in your Hour
                                 </div>
                             </div>
                     </div>
@@ -120,6 +120,39 @@
                 </div>
             </div>
         </div>
+        <?php
+        foreach ($transactions as $key => $value) {
+        ?>
+            <div class="modal fade" id="detail<?= $value['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Create Operating</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" action="<?= $config['base_url'] . 'controllers/OperatingController.php?action=update' ?>" class="needs-validation" novalidate="">
+                                <input type="text" name="id" hidden value="<?= $value['id'] ?>">
+                                <div class="form-group">
+                                    <label for="name">Hour</label>
+                                    <input id="name" type="time" value="<?= $value['hour'] ?>" class="form-control" name="hour" tabindex="1" required autofocus>
+                                    <div class="invalid-feedback">
+                                        Please fill in your Hour
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" tabindex="6">Save changes</button>
+                        </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
 
         <div class="section-body">
         </div>
