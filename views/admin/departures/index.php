@@ -102,9 +102,9 @@
                                                                 if ($value['status'] == 1)
                                                                     $statuName = 'Active';
                                                                 else
-
+                                                                    $statuName = 'Inactive';
                                                                 ?>
-                                                                <div class="<?= $class ?>">Active</div>
+                                                                <div class="<?= $class ?>"><?= $statuName ?></div>
                                                             </td>
                                                             <td>
                                                                 <button class="btn btn-secondary">Detail</button>

@@ -57,7 +57,7 @@ if ($_GET['action'] == 'login') {
 
     $_SESSION['login_form'] = $_POST;
     $_SESSION['error'] = 'email or password is incorrect';
-    header('Location:' . $config['base_url'] . 'auth/login.php');
+    header('Location:' . $config['base_url'] . 'views/auth/login.php');
 }
 
 if ($_GET['action'] == 'logout') {
