@@ -42,17 +42,27 @@ if ($_GET['action'] == 'login') {
 
     $user = isEmailAlreadyRegister($pdo, $email);
 
+    if ($user['status'] == 0) {
+        $_SESSION['login_form'] = $_POST;
+        $_SESSION['error'] = 'Your account is non active';
+        header('Location:' . $config['base_url'] . 'views/auth/login.php');
+        exit;
+    }
+
     if (password_verify($password, $user['password'])) {
         $_SESSION['id'] = $user['id'];
         $_SESSION['name'] = $user['name'];
         $_SESSION['email'] = $user['email'];
         $_SESSION['role'] = $user['role'];
 
-        if ($user['role'] == 'user')
+        if ($user['role'] == 'user') {
+
             header("Location: " . $config['base_url']);
-        else
+            exit;
+        } else {
             header("Location: " . $config['base_url'] . 'views/admin/dashboard');
-        exit();
+            exit();
+        }
     }
 
     $_SESSION['login_form'] = $_POST;
