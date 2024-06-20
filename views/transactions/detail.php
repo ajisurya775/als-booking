@@ -84,7 +84,7 @@
                                                             <?= date('Y/m/d H:i:s', strtotime($transaction['created_at'])); ?><br><br>
                                                         </address>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-6 text-md-right">
                                                         <strong>Invoice Qr:</strong><br>
                                                         <?php
 
@@ -210,7 +210,9 @@
                                         <a class="btn btn-danger btn-icon icon-left" href="<?= $config['base_url'] . 'controllers/InvoiceController.php?action=changeStatus&order_number=' . $transaction['order_number'] ?>"><i class="fas fa-times"></i> Cancel</a>
                                     <?php } ?>
                                 </div>
-                                <a class="btn btn-warning btn-icon icon-left" href="<?= $config['base_url'] . 'controllers/PdfController.php?id=' . $transaction['id'] ?>"><i class="fas fa-download"></i> Download</a>
+                                <?php if ($transaction['status'] == 'Paid' || $transaction['status'] == 'Finish') { ?>
+                                    <a class="btn btn-warning btn-icon icon-left" href="<?= $config['base_url'] . 'controllers/PdfController.php?id=' . $transaction['id'] ?>"><i class="fas fa-download"></i> Download</a>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>

@@ -29,7 +29,7 @@
 
                 <li class=<?= strpos($actual_link, "views/admin/operating-schedules/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/admin/operating-schedules' ?>"><i class="fa fa-clock" aria-hidden="true"></i> <span>Operating Schedule</span></a></li>
 
-                <li class=<?= strpos($actual_link, "views/admin/users/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/admin/users' ?>"><i class="fa fa-users" aria-hidden="true"></i> <span>Manage User</span></a></li>
+                <li class=<?= strpos($actual_link, "views/admin/manage-users/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/admin/manage-users' ?>"><i class="fa fa-users" aria-hidden="true"></i> <span>Manage User</span></a></li>
 
                 <li class="menu-header">Reports</li>
                 <li class=<?= strpos($actual_link, "views/admin/sales/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/admin/sales' ?>"><i class="fa fa-book" aria-hidden="true"></i> <span>Sales</span></a></li>
