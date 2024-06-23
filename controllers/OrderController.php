@@ -16,7 +16,7 @@ if (isset($_GET['action']) == 'create-order') {
     $stationId = $_GET['station_id'];
     $userId = $_SESSION['id'];
     $name = $_SESSION['name'];
-    $succesRedirectUrl = $config['base_url'] . 'transactions';
+    $succesRedirectUrl = $config['base_url'] . 'views/transactions';
 
     $cart = getCartDepartureByUserId($pdo, $userId);
 

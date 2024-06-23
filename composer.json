@@ -7,6 +7,7 @@
     ],
     "require": {
       "xendit/xendit-php": "5.0.0",
-        "dompdf/dompdf": "^3.0"
+        "dompdf/dompdf": "^3.0",
+        "bacon/bacon-qr-code": "^3.0"
     }
   }
