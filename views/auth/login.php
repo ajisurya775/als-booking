@@ -90,7 +90,7 @@
     </div>
     </div>
 
-    <?php include "../../components/script.php" ?>
+    <?php include "../components/script.php" ?>
 
 </body>
 

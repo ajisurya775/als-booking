@@ -42,3 +42,21 @@ if (!function_exists('statusName')) {
         return $statusName;
     }
 }
+
+if (!function_exists('generateStartEndDateTemplateGraph')) {
+    function generateStartEndDateTemplateGraph($startDate, $endDate)
+    {
+        $start = new DateTime($startDate);
+        $end = new DateTime($endDate);
+        $end->modify('+1 day');
+        $interval = new DateInterval('P1D');
+        $dateRange = new DatePeriod($start, $interval, $end);
+
+        $result = [];
+        foreach ($dateRange as $date) {
+            $result[$date->format("Y-m-d")] = 0;
+        }
+
+        return $result;
+    }
+}
