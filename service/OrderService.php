@@ -71,3 +71,16 @@ function getOrderByOrderNumber($pdo, $orderNumber)
 
     return $stmt->fetch();
 }
+
+function updateStatusOrder($pdo, $status, $id)
+{
+    $stmt = $pdo->prepare("update orders set status = :status where id = :id");
+    $stmt->execute([':status' => $status, ':id' => $id]);
+}
+
+function getOrderByOrderId($pdo, $id)
+{
+    $stmt = $pdo->prepare("SELECT * FROM orders WHERE id = :id AND status = :status");
+    $stmt->execute([':id' => $id, ':status' => 'Paid']);
+    return $stmt->fetch();
+}

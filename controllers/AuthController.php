@@ -59,9 +59,12 @@ if ($_GET['action'] == 'login') {
 
             header("Location: " . $config['base_url']);
             exit;
+        } else if ($user['role'] == 'bus conductor') {
+            header("Location: " . $config['base_url'] . 'views/scanner');
+            exit();
         } else {
             header("Location: " . $config['base_url'] . 'views/admin/dashboard');
-            exit();
+            exit;
         }
     }
 

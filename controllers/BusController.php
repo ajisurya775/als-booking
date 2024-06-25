@@ -13,7 +13,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'create') {
 
     $imageService = new ImageService;
 
-    $path = $imageService->uploadImage($_FILES['image'], 'buses');
+    list($status, $path) = $imageService->uploadImage($_FILES['image'], 'buses');
 
     $busService->insertBus($pdo, $request, $path);
 
@@ -30,11 +30,16 @@ if (isset($_GET['action']) && $_GET['action'] == 'update') {
 
     $imageService = new ImageService;
 
-    $path = null;
-    if (isset($_FILES['image']))
-        $path = $imageService->uploadImage($_FILES['image'], 'buses');
+    $result = null;
+    if ($_FILES['image']['name']) {
+        list($status, $result) = $imageService->uploadImage($_FILES['image'], 'buses');
 
-    $bus = $busService->updateBus($pdo, $request, $path, $id);
+        if (!$status)
+            echo "<script>alert('Error: .$result.'); window.history.back();</script>";
+    }
+
+
+    $bus = $busService->updateBus($pdo, $request, $result, $id);
 
     header('Location:' . $config['base_url'] . 'views/admin/bus');
 }

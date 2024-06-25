@@ -13,7 +13,7 @@
                 <li class=<?= $actual_link ==  $config['base_url'] ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] ?>"><i class="fa fa-bus"></i> <span>Pesan Tiket</span></a></li>
                 <li class=<?= strpos($actual_link, "views/transactions/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/transactions' ?>"><i class="far fa-credit-card"></i> <span>Transakasi</span></a></li>
 
-            <?php } else { ?>
+            <?php } else if ($_SESSION['role'] == 'admin') { ?>
 
                 <li class=<?= strpos($actual_link, "views/admin/dashboard/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/admin/dashboard' ?>"><i class="fa fa-safari" aria-hidden="true"></i><span>Dashboard</span></a></li>
 
@@ -33,6 +33,8 @@
 
                 <li class="menu-header">Reports</li>
                 <li class=<?= strpos($actual_link, "views/admin/sales/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/admin/sales' ?>"><i class="fa fa-book" aria-hidden="true"></i> <span>Sales</span></a></li>
+            <?php } else { ?>
+                <li class=<?= strpos($actual_link, "views/scanner/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/scanner' ?>"><i class="fa fa-qr" aria-hidden="true"></i> <span>Scanner</span></a></li>
             <?php } ?>
         </ul>
     </aside>
