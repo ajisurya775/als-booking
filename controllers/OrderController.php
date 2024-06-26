@@ -10,7 +10,7 @@ require_once "../service/OrderService.php";
 require_once "../service/DepartureService.php";
 require_once "../service/XenditService.php";
 
-if (isset($_GET['action']) == 'create-order') {
+if (isset($_GET['action']) && $_GET['action'] == 'create-order') {
 
     $departureId = $_GET['departure_id'];
     $stationId = $_GET['station_id'];
@@ -53,4 +53,23 @@ function getOrderChairNumberByOrderId($pdo, $query, $id)
     $stmt->execute(['order_id' => $id]);
 
     return $stmt->fetchAll();
+}
+
+if (isset($_GET['action']) && $_GET['action'] == 'verified') {
+
+    $id = $_GET['id'];
+    $status = 'Finish';
+
+    $order = getOrderByOrderId($pdo, $id);
+
+    if ($order) {
+        updateStatusOrder($pdo, $status, $id);
+
+        $_SESSION['validation_name'] = $order['name'];
+        $_SESSION['order_number'] = $order['order_number'];
+
+        echo "<script>alert('Success To Verified.'); window.history.back();</script>";
+    } else {
+        echo "<script>alert('Error:Order id not found'); window.history.back();</script>";
+    }
 }

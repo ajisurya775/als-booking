@@ -16,28 +16,27 @@ class ImageService
         $fileTmpPath = $image['tmp_name'];
         $fileName = $image['name'];
         $fileSize = $image['size'];
-        $fileError = $image['error'];
 
         $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
         if (!in_array($fileExtension, $validExtensions)) {
-            echo "<script>alert('Error: Hanya file dengan ekstensi JPG, JPEG, atau PNG yang diizinkan.'); window.history.back();</script>";
-            return false;
+            $message = 'Hanya file dengan ekstensi JPG, JPEG, atau PNG yang diizinkan.';
+            return array(false, $message);
         }
 
         if ($fileSize > $maxFileSize) {
-            echo "<script>alert('Error: Ukuran file melebihi batas maksimum 2MB.'); window.history.back();</script>";
-            return false;
+            $message = 'Ukuran file melebihi batas maksimum 2MB';
+            return array(false, $message);
         }
 
         $newFileName = $fileName;
         $destPath = $uploadPath . '/' . $newFileName;
 
         if (!move_uploaded_file($fileTmpPath, $destPath)) {
-            echo "<script>alert('Error: Gagal mengupload file.'); window.history.back();</script>";
-            return false;
+            $message = 'Gagal mengupload file.';
+            return array(false, $message);
         }
 
-        return str_replace('../', '', $destPath);
+        return array(true, str_replace('../', '', $destPath));
     }
 }

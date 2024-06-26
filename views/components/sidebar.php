@@ -1,10 +1,11 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="index.html">ALS BOOKING</a>
+            <img src="<?= $config['base_url'] . 'assets/img/icon-als.png' ?>" width="50" alt="" srcset="">
+            <a href="index.html">Lintas Sumatra</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="index.html">St</a>
+            <a href="index.html">ALS</a>
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Menu</li>
@@ -13,7 +14,7 @@
                 <li class=<?= $actual_link ==  $config['base_url'] ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] ?>"><i class="fa fa-bus"></i> <span>Pesan Tiket</span></a></li>
                 <li class=<?= strpos($actual_link, "views/transactions/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/transactions' ?>"><i class="far fa-credit-card"></i> <span>Transakasi</span></a></li>
 
-            <?php } else { ?>
+            <?php } else if ($_SESSION['role'] == 'admin') { ?>
 
                 <li class=<?= strpos($actual_link, "views/admin/dashboard/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/admin/dashboard' ?>"><i class="fa fa-safari" aria-hidden="true"></i><span>Dashboard</span></a></li>
 
@@ -33,6 +34,8 @@
 
                 <li class="menu-header">Reports</li>
                 <li class=<?= strpos($actual_link, "views/admin/sales/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/admin/sales' ?>"><i class="fa fa-book" aria-hidden="true"></i> <span>Sales</span></a></li>
+            <?php } else { ?>
+                <li class=<?= strpos($actual_link, "views/scanner/") ? 'active' : '' ?>><a class="nav-link" href="<?= $config['base_url'] . 'views/scanner' ?>"><i class="fa fa-qr" aria-hidden="true"></i> <span>Scanner</span></a></li>
             <?php } ?>
         </ul>
     </aside>
