@@ -57,7 +57,7 @@
                                         <h4>Today's Revenue</h4>
                                     </div>
                                     <div class="card-body">
-                                        <?= number_format($revenue['today_revenue'], 0, ',', '.') ?>
+                                        <?= number_format($revenue['today_revenue'] ?? 0, 0, ',', '.') ?>
                                     </div>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                                         <h4>This Month</h4>
                                     </div>
                                     <div class="card-body">
-                                        <?= number_format($revenue['this_month_revenue'], 0, ',', '.') ?>
+                                        <?= number_format($revenue['this_month_revenue'] ?? 0, 0, ',', '.') ?>
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +87,7 @@
                                         <h4>Last Month</h4>
                                     </div>
                                     <div class="card-body">
-                                        <?= number_format($revenue['last_month_revenue'], 0, ',', '.') ?>
+                                        <?= number_format($revenue['last_month_revenue'] ?? 0, 0, ',', '.') ?>
                                     </div>
                                 </div>
                             </div>
@@ -102,7 +102,7 @@
                                         <h4>This Year</h4>
                                     </div>
                                     <div class="card-body">
-                                        <?= number_format($revenue['this_year_revenue'], 0, ',', '.') ?>
+                                        <?= number_format($revenue['this_year_revenue'] ?? 0, 0, ',', '.') ?>
                                     </div>
                                 </div>
                             </div>
