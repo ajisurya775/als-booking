@@ -1,8 +1,8 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <img src="<?= $config['base_url'] . 'assets/img/icon-als.png' ?>" width="50" alt="" srcset="">
-            <a href="index.html">Lintas Sumatra</a>
+            <img src="<?= $config['base_url'] . 'assets/img/icon-als.png' ?>" style=" display: block; margin: 0 auto;" width="50" alt="" srcset="">
+            <a href="index.html">Antar Lintas Sumatra</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
             <a href="index.html">ALS</a>
