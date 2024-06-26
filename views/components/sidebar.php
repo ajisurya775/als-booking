@@ -1,10 +1,11 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="index.html">ALS BOOKING</a>
+            <img src="<?= $config['base_url'] . 'assets/img/icon-als.png' ?>" width="50" alt="" srcset="">
+            <a href="index.html">Lintas Sumatra</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="index.html">St</a>
+            <a href="index.html">ALS</a>
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Menu</li>
