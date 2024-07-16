@@ -2,11 +2,11 @@
 
 require_once "../Traits/generateUUid.php";
 
-function insertOrder($pdo, $orderNumber, $stationId, $userId, $name, $cart, $busDeparture)
+function insertOrder($pdo, $orderNumber, $stationId, $userId, $name, $cart, $busDeparture, $quantity)
 {
     $id = generateUUID();
     $now = date('Y-m-d H:i:s');
-    $subTotal = $cart['quantity'] * $busDeparture['price'];
+    $subTotal = $quantity * $busDeparture['price'];
 
     //penambahan nilai jika ada
     $grandTotal = $subTotal;
@@ -14,17 +14,17 @@ function insertOrder($pdo, $orderNumber, $stationId, $userId, $name, $cart, $bus
     $stmt = $pdo->prepare("insert into orders (id, order_number, station_id, user_id, name, status, sub_total, grand_total, date_departure, created_at, updated_at) values (?,?,?,?,?,?,?,?,?,?,?)");
     $stmt->execute([$id, $orderNumber, $stationId, $userId, $name, 'pending', $subTotal, $grandTotal, $cart['date_departure'], $now, $now]);
 
-    insertOrderDetail($pdo, $id, $busDeparture, $cart);
+    insertOrderDetail($pdo, $id, $busDeparture, $quantity);
 
     return array($grandTotal, $id);
 }
 
-function insertOrderDetail($pdo, $id, $busDeparture, $cart)
+function insertOrderDetail($pdo, $id, $busDeparture, $quantity)
 {
     $now = date('Y-m-d H:i:s');
     $stmt = $pdo->prepare("insert into order_details (order_id,bus_departure_id,from_province,to_province,bus_class_id, price, quantity, created_at, updated_at) values (?,?,?,?,?,?,?,?,?)");
 
-    $stmt->execute([$id, $busDeparture['id'], $busDeparture['from_province'], $busDeparture['to_province'], $busDeparture['bus_class_id'], $busDeparture['price'], $cart['quantity'], $now, $now]);
+    $stmt->execute([$id, $busDeparture['id'], $busDeparture['from_province'], $busDeparture['to_province'], $busDeparture['bus_class_id'], $busDeparture['price'], $quantity, $now, $now]);
 }
 
 //generate tiket ketika udh di bayar
@@ -83,4 +83,21 @@ function getOrderByOrderId($pdo, $id)
     $stmt = $pdo->prepare("SELECT * FROM orders WHERE id = :id AND status = :status");
     $stmt->execute([':id' => $id, ':status' => 'Paid']);
     return $stmt->fetch();
+}
+
+function insertOrderChairssNow($pdo, $orderId, $orderChairs)
+{
+    $stmt = $pdo->prepare("INSERT INTO order_chairs (order_id, order_chairs, created_at, updated_at) VALUES (:order_id, :order_chairs, :created_at, :updated_at)");
+
+    $createdAt = date('Y-m-d H:i:s');
+    $updatedAt = date('Y-m-d H:i:s');
+
+    foreach ($orderChairs as $value) {
+        $stmt->bindParam(':order_id', $orderId);
+        $stmt->bindParam(':order_chairs', $value);
+        $stmt->bindParam(':created_at', $createdAt);
+        $stmt->bindParam(':updated_at', $updatedAt);
+
+        $stmt->execute();
+    }
 }

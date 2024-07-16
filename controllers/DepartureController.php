@@ -12,7 +12,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'search') {
     $formProvinceId = $_POST['from_province_id'];
     $toProvinceId = $_POST['to_province_id'];
     $dateDeparture = $_POST['date_departure'];
-    $quantity = $_POST['quantity'];
 
     $userId = $_SESSION['id'];
 

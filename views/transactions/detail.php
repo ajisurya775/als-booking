@@ -106,7 +106,6 @@
                                 <div class="row mt-4">
                                     <div class="col-md-12">
                                         <div class="section-title">Detail Pesanan</div>
-                                        <p class="section-lead">Nomer Kursi anda akan muncul Ketika sudah terbayarkan .</p>
                                         <div class="table-responsive">
                                             <table class="table table-striped table-hover table-md">
                                                 <tr>
@@ -132,10 +131,9 @@
                                         <div class="row mt-4">
 
                                             <div class="col-lg-8">
-                                                <?php if ($transaction['status'] == 'Paid' || $transaction['status'] == 'Finish') { ?>
-                                                    <div class="section-title">Kursi</div>
+                                                <div class="section-title">Kursi</div>
                                                 <?php
-                                                }
+
 
                                                 $query = "SELECT oc.order_chairs, b.code
                                                             FROM order_chairs AS oc
@@ -156,9 +154,7 @@
                                                 $chairs = implode(' ', $chairNumbers);
 
                                                 ?>
-                                                <?php if ($transaction['status'] == 'Paid' || $transaction['status'] == 'Finish') { ?>
-                                                    <div class="chairs-container"><?= $chairs ?></div>
-                                                <?php } ?>
+                                                <div class="chairs-container"><?= $chairs ?></div>
                                             </div>
 
                                             <style>

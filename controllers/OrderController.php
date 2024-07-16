@@ -16,6 +16,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'create-order') {
     $stationId = $_GET['station_id'];
     $userId = $_SESSION['id'];
     $name = $_SESSION['name'];
+    $chairs = $_POST['chairs'];
     $succesRedirectUrl = $config['base_url'] . 'views/transactions';
 
     $cart = getCartDepartureByUserId($pdo, $userId);
@@ -26,7 +27,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'create-order') {
 
     $busDeparture = getDepartureById($pdo, $departureId);
 
-    list($amount, $orderId) = insertOrder($pdo, $orderNumber, $stationId, $userId, $name, $cart, $busDeparture);
+    list($amount, $orderId) = insertOrder($pdo, $orderNumber, $stationId, $userId, $name, $cart, $busDeparture, count($chairs));
+
+    insertOrderChairssNow($pdo, $orderId, $chairs);
 
     $response = createInvoice($xendit['credential_key'], $orderNumber, $amount, $succesRedirectUrl);
 
@@ -72,4 +75,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'verified') {
     } else {
         echo "<script>alert('Error:Order id not found'); window.history.back();</script>";
     }
+}
+
+if (isset($_GET['action']) && $_GET['action'] == 'choose') {
+
+    $departureId = $_POST['departure_id'];
+    $stationId = $_POST['station_id'];
+    $capacity = $_POST['capacity'];
+    $code = $_POST['code'];
+    $dateDeparture = $_POST['date_departure'];
+
+    header("Location:" . "../chairs.php?departure_id=$departureId&station_id=$stationId&capacity=$capacity&code=$code&date_departure=$dateDeparture");
 }

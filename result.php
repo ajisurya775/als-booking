@@ -48,6 +48,7 @@
                                 bd.station_id,
                                 b.name,
                                 b.capacity,
+                                b.code,
                                 bd.price,
                                 dh.hour,
                                 b.asset_url,
@@ -81,7 +82,6 @@
 
                             $departures = $stmt->fetchAll();
 
-                            // echo json_encode($departures);
                             ?>
 
                             <?php foreach ($departures as $key => $value) {
@@ -98,13 +98,18 @@
                                             </div>
                                         </div>
                                         <div class="article-details">
-                                            <form action="<?= $config['base_url'] . 'controllers/OrderController.php?action=create-order&departure_id=' . $value['id'] . '&station_id=' . $value['station_id'] ?>" method="post">
+                                            <form action="<?= $config['base_url'] . 'controllers/OrderController.php?action=choose' ?>" method="post">
+                                                <input type="hidden" name="departure_id" value="<?= $value['id'] ?>">
+                                                <input type="hidden" name="station_id" value="<?= $value['station_id'] ?>">
+                                                <input type="hidden" name="capacity" value="<?= $value['capacity'] ?>">
+                                                <input type="hidden" name="code" value="<?= $value['code'] ?>">
+                                                <input type="hidden" name="date_departure" value="<?= $date; ?>">
                                                 <p>Harga Rp. <?= number_format($value['price'], 2, ',', '.') ?></p>
                                                 <p>Sisa Kursi <?= $total ?></p>
                                                 <p>Jadwal <?= $value['hour'] ?></p>
                                                 <div class="article-cta">
                                                     <?php $calss =  $total < $quantity ? 'd-none' : '' ?>
-                                                    <button type="submit" class="btn btn-primary <?= $calss ?>">Pesan Sekarang</button>
+                                                    <button type="submit" class="btn btn-primary <?= $calss ?>">Pilih Kursi Anda</button>
                                                 </div>
                                             </form>
 

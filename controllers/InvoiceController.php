@@ -26,7 +26,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'callback') {
 
     if ($xenditXCallbackToken == $xenditCredential['x_callback_token'] && $status == 'PAID') {
         updateStatusOrderByOrderNumber($pdo, $orderNumber, 'Paid');
-        insertOrderChairs($pdo, $order['id'], $order);
+        // insertOrderChairs($pdo, $order['id'], $order);
     } else if ($xenditXCallbackToken == $xenditCredential['x_callback_token'] && $status == 'EXPIRED') {
         updateStatusOrderByOrderNumber($pdo, $orderNumber, 'Expired');
     } else {

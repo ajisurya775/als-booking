@@ -76,12 +76,20 @@
             font-size: 18px;
             margin-top: 10px;
         }
+
+        .qr-code {
+            width: 15%;
+            position: absolute;
+            top: 0;
+            right: 60px;
+        }
     </style>
 </head>
 
 <?php
 
 require 'configs/connection.php';
+require_once 'configs/config_url.php';
 
 $id = $_GET['id'];
 
@@ -153,6 +161,7 @@ $chair = implode($chairNumbers);
             <div><?= $data['address'] ?></div>
             <div>Medan - Indonesia</div>
             <div>Tel: <?= $data['phone_number'] ?> | Fax: <?= $data['fax_number'] ?></div>
+            <div><img class="qr-code" src="<?= $config['base_url'] . 'assets/img/qr/' . $id . '.svg' ?>" alt="" srcset=""></div>
         </div>
 
         <table class="details">

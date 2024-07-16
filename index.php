@@ -80,14 +80,6 @@
                         </div>
                       </div>
 
-                      <div class="form-group">
-                        <label>Jumlah Penumpang</label>
-                        <input type="number" class="form-control" value="<?= $cart['quantity'] ?? '' ?>" name="quantity" min="1" required autofocus>
-                        <div class="invalid-feedback">
-                          Silahkan isi jumlah penumpang
-                        </div>
-                      </div>
-
                       <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i> Cari</button>
                     </form>
 

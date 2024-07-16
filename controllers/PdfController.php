@@ -1,6 +1,7 @@
 <?php
 require '../vendor/autoload.php';
 require '../configs/connection.php';
+require '../configs/config_url.php';
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -144,6 +145,12 @@ try {
                 font-size: 18px;
                 margin-top: 10px;
             }
+            .qr-code {
+            width: 15%;
+            position: absolute;
+            top: 0;
+            right: 60px;
+        }
         </style>
     </head>
     <body>
@@ -154,6 +161,7 @@ try {
                 <div>' . htmlspecialchars($data['address']) . '</div>
                 <div>Medan - Indonesia</div>
                 <div>Tel: ' . htmlspecialchars($data['phone_number']) . ' | Fax: ' . htmlspecialchars($data['fax_number']) . '</div>
+                <div><img class="qr-code" src="' . $config['base_url'] . 'assets/img/qr/' . $id . '.svg">"</div>
             </div>
             <table class="details">
                 <tr>
